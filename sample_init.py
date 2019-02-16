@@ -5,7 +5,6 @@ import multiprocessing as mp
 import pandas as pd
 import numpy as np
 from construct_tree import TreeInitialize
-# import traceback
 
 
 LOAD_DIR = os.path.dirname(os.path.abspath(__file__)) + '/datasets/UserBehavior_sp.csv'
@@ -44,6 +43,7 @@ def _mask_padding(data, max_len):
 
 
 def data_process():
+    """convert and split the raw data."""
     data_raw = pd.read_csv(LOAD_DIR, header=None,
                            names=['user_ID', 'item_ID', 'category_ID', 'behavior_type', 'timestamp'])
     data_raw = data_raw[:10000]
@@ -136,6 +136,7 @@ def _tree_generate_worker(task_queue, sample_queue):
 
 
 def tree_generate_samples(items, leaf_dict, root):
+    """Sample based on the constructed tree with multiprocess."""
     jobs = mp.JoinableQueue()
     tree_samples = mp.Queue()
     for _ in range(8):
@@ -184,12 +185,12 @@ def _merge_generate_worker(tree_data, task_queue, sample_queue):
             sample_queue.put(complete_sample)
         except Exception as err:
             print("Merge Worker Process Exception Info: {}".format(str(err)))
-            # traceback.print_exc()
         finally:
             task_queue.task_done()
 
 
 def merge_samples(data, tree_sample):
+    """combine the preprocessed samples and tree samples."""
     jobs = mp.JoinableQueue()
     complete_samples = mp.Queue()
     for _ in range(8):
@@ -218,6 +219,7 @@ def merge_samples(data, tree_sample):
 
 
 class Dataset(object):
+    """construct the dataset iterator."""
     def __init__(self, data, batch_size, shuffle=False):
         self.data = data
         self.batch_size = batch_size
@@ -245,13 +247,3 @@ if __name__ == '__main__':
     total_samples = tree_generate_samples(items, tree.leaf_dict, tree.root)
     data_complete = merge_samples(data_train, total_samples)
     dtrain = Dataset(data_complete, 50, shuffle=True)
-    for item, node, is_leaf, label in dtrain:
-        print(item[:5])
-        print('===========================================================')
-        print(node[:5])
-        print('===========================================================')
-        print(is_leaf[:5])
-        print('===========================================================')
-        print(label[:5])
-        break
-

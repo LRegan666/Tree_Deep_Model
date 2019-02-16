@@ -2,6 +2,7 @@ import numpy as np
 
 
 class TreeNode(object):
+    """define the tree node structure."""
     def __init__(self, x, item_id=None):
         self.val = x
         self.item_id = item_id
@@ -11,6 +12,7 @@ class TreeNode(object):
 
 
 class TreeInitialize(object):
+    """"Build the random binary tree."""
     def __init__(self, data):
         self.data = data[['item_ID', 'category_ID']]
         self.items = None
@@ -68,6 +70,7 @@ class TreeInitialize(object):
 
 
 class TreeLearning(TreeInitialize):
+    """Build the k-means clustering binary tree"""
     def __init__(self, items, index_dict):
         self.items = items
         self.items_dict = dict((v, i) for i, v in enumerate(self.items))

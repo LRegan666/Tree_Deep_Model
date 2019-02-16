@@ -10,6 +10,13 @@ SUMMARY_DIR = MODEL_DIR + '/logs'
 
 
 class NeuralNet(object):
+    """Deep network structure:
+    input_embedding+node_embedding >>
+    attention_block >>
+    union_embedding >>
+    MLP(128>64>24>2) >>
+    label_probabilities.
+    """
     def __init__(self, item_size, node_size, embedding_size):
         self.item_size = item_size
         self.embedding_size = embedding_size
@@ -80,7 +87,7 @@ class NeuralNet(object):
         logits = tf.layers.dense(layer3_bn, 2)
         return logits
 
-    def _check_accuracy(self, validate_data, is_training):
+    def _check_accuracy(self, iter_epoch, validate_data, is_training):
         num_correct, num_samples = 0, 0
         for items_val, nodes_val, is_leafs_val, labels_val in validate_data:
             scores = self._network_structure(items_val, nodes_val, is_leafs_val, is_training)
@@ -93,8 +100,8 @@ class NeuralNet(object):
             num_samples += label_true.shape[0]
             num_correct += label_predict.shape[0]
         accuracy = float(num_correct) / num_samples
-        print("total positive samples: {}, "
-              "correct samples: {}, accuracy: {}".format(num_samples, num_correct, accuracy))
+        print("Iteration {}, total positive samples: {}, "
+              "correct samples: {}, accuracy: {}".format(iter_epoch, num_samples, num_correct, accuracy))
 
     def train(self, use_gpu=False, train_data=None, validate_data=None,
               lr=0.001, b1=0.9, b2=0.999, eps=1e-08, num_epoch=10, check_epoch=200, save_epoch=1000):
@@ -116,15 +123,13 @@ class NeuralNet(object):
                     optimizer = tf.train.AdamOptimizer(learning_rate=lr, beta1=b1, beta2=b2, epsilon=eps)
                     optimizer.apply_gradients(zip(gradients, container.trainable_variables()))
                     if iter_epoch % check_epoch == 0:
-                        self._check_accuracy(validate_data, 0)
+                        self._check_accuracy(iter_epoch, validate_data, 0)
                     if iter_epoch % save_epoch == 0:
                         for k, v in container._store._vars.items():
                             setattr(check_point, k, v)
                         self.saver = tf.train.Checkpoint(checkpointable=check_point)
                         self.saver.save(MODEL_NAME)
                     iter_epoch += 1
-                    break
-                break
         print("It's completed to train the network.")
 
     def get_embeddings(self, item_list, use_gpu=True):

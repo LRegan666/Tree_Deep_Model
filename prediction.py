@@ -2,6 +2,7 @@ import numpy as np
 
 
 def candidates_generator(state, root, k, model):
+    """layer-wise retrieval algorithm in prediction."""
     Q, A = [root], []
     while Q:
         for node in Q:
@@ -12,7 +13,6 @@ def candidates_generator(state, root, k, model):
         for node in Q:
             data = state + (np.array([[node.val]]), np.array([[0]]))
             prob = model.predict(data)
-            print(prob[0])
             probs.append(prob[0])
         prob_list = list(zip(Q, probs))
         prob_list = sorted(prob_list, key=lambda x: x[1], reverse=True)
@@ -44,10 +44,11 @@ def candidates_generator(state, root, k, model):
 
 
 def metrics_count(data, root, k, model):
+    """Recall/Precision/F-measure statistic."""
     precision_rate, recall_rate, fm_rate, novelty_rate, num = 0, 0, 0, 0, 0
     for items in data:
         size = items.shape[0]
-        for i in range(1):
+        for i in range(size):
             cands = candidates_generator((items[i][None, :],), root, k, model)
             item_clip = list(set(items[i][items[i] != -2].tolist()))
             m, g = len(cands), len(item_clip)

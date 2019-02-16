@@ -26,12 +26,9 @@ def main():
             print(len(item_embeddings))
             tree = TreeLearning(item_embeddings, item_ids)
             _ = tree.clustering_binary_tree()
-        break
-    """
     dtest = Dataset(data_test, 100)
     metrics_count(dtest, tree.root, 150, model)
     print("========================================== end ==========================================")
-    """
 
 
 if __name__ == '__main__':
