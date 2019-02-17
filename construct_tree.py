@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 
 class TreeNode(object):
@@ -73,7 +74,6 @@ class TreeLearning(TreeInitialize):
     """Build the k-means clustering binary tree"""
     def __init__(self, items, index_dict):
         self.items = items
-        self.items_dict = dict((v, i) for i, v in enumerate(self.items))
         self.mapper = index_dict
         self.root = None
         self.leaf_dict = {}
@@ -101,12 +101,10 @@ class TreeLearning(TreeInitialize):
         m1, m2 = items[0], items[1]
         while True:
             indicate = np.sum(np.square(items - m1), axis=1) - np.sum(np.square(items - m2), axis=1)
-            indicate_m1 = np.repeat(indicate >= 0, items.shape[1], axis=1)
-            indicate_m2 = np.repeat(indicate < 0, items.shape[1], axis=1)
-            items_m1, items_m2 = items[indicate_m1], items[indicate_m2]
+            items_m1, items_m2 = items[indicate < 0], items[indicate >= 0]
             m1_new = np.sum(items_m1, axis=0) / items_m1.shape[0]
             m2_new = np.sum(items_m2, axis=0) / items_m2.shape[0]
-            if np.sum(np.absolute(m1_new - m1)) < 1e-6 and np.sum(np.absolute(m2_new -m2)) < 1e-6:
+            if np.sum(np.absolute(m1_new - m1)) < 1e-3 and np.sum(np.absolute(m2_new - m2)) < 1e-3:
                 break
             m1, m2 = m1_new, m2_new
         items_m1, items_m2 = self._balance_clutering(m1, m2, items_m1, items_m2)
@@ -114,7 +112,7 @@ class TreeLearning(TreeInitialize):
 
     def _build_binary_tree(self, root, items):
         if items.shape[0] == 1:
-            leaf_node = TreeNode(0, item_id=self.mapper[self.items_dict[items[0].tolist()]])
+            leaf_node = TreeNode(0, item_id=self.mapper[self.items.index(items[0].tolist())])
             leaf_node.parent = root.parent
             return leaf_node
         left_items, right_items = self._k_means_clustering(items)
