@@ -81,13 +81,13 @@ class TreeLearning(TreeInitialize):
 
     def _balance_clutering(self, c1, c2, item1, item2):
         amount = item1.shape[0] - item2.shape[0]
-        if amount > 0:
+        if amount > 1:
             num = int(amount / 2)
             distance = np.sum(np.square(item1 - c1), axis=1)
             item_move = item1[distance.argsort()[-num:]]
             item2_adjust = np.concatenate((item2, item_move), axis=0)
             item1_adjust = np.delete(item1, distance.argsort()[-num:], axis=0)
-        elif amount < 0:
+        elif amount < -1:
             num = int(abs(amount) / 2)
             distance = np.sum(np.square(item2 - c2), axis=1)
             item_move = item2[distance.argsort()[-num:]]
