@@ -25,20 +25,19 @@
 
 ### 算法模型
 ![algorithm-structure](./algorithm_structure.png)
-_引用自参考文献[1]中的图2_
-    深度树算法流程[1]:
+    深度树算法流程(文献[1)]:
     1. 构造随机二叉树并生成样本
     2. 训练DNN模型直到收敛
     3. 基于DNN模型得到样本的Embedding，重新构造聚类二叉树
     4. 循环上述过程
 
 ### 进度
-   完成功能测试，跑通模型
-   TODO: 改进性能，验证模型
+    完成功能测试，跑通模型
+    TODO: 改进性能，验证模型
 
 ### 参考文献
-   [1] Learning Tree-based Deep Model for Recommender Systems, Han Zhu, Xiang Li, Pengye Zhang, etc.
-   [2] Deep Interest Network for Click-Through Rate Prediction, Guorui Zhou, Chengru Song, Xiaoqiang Zhu, etc.
-   [3] Empirical Evaluation of Rectified Activations in Convolution Network, Bing Xu, Naiyan Wang, Tianqi Chen, etc.
-   [4] Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification, Kaiming He, Xiangyu Zhang, Shaoqing Ren, etc.
-   [5] Distributed Representations of Words and Phrases and their Compositionality, Tomas Mikolov, Ilya Sutskever, Kai Chen, etc.
+    [1] Learning Tree-based Deep Model for Recommender Systems, Han Zhu, Xiang Li, Pengye Zhang, etc.
+    [2] Deep Interest Network for Click-Through Rate Prediction, Guorui Zhou, Chengru Song, Xiaoqiang Zhu, etc.
+    [3] Empirical Evaluation of Rectified Activations in Convolution Network, Bing Xu, Naiyan Wang, Tianqi Chen, etc.
+    [4] Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification, Kaiming He, Xiangyu Zhang, Shaoqing Ren, etc.
+    [5] Distributed Representations of Words and Phrases and their Compositionality, Tomas Mikolov, Ilya Sutskever, Kai Chen, etc.
