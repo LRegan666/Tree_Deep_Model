@@ -12,7 +12,7 @@
 ### 实验环境
     系统环境: ubuntu 18.04LTS
     IDE：PyCharm 2018.3
-    实验数据集：[User Behavior Data](https://tianchi.aliyun.com/dataset/dataDetail?dataId=649&userId=1)
+[实验数据集](https://tianchi.aliyun.com/dataset/dataDetail?dataId=649&userId=1)
 
 ### 代码结构
 ![code-structure](./code_structure.jpg)  
