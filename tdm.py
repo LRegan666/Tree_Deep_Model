@@ -23,7 +23,6 @@ def main():
         num_epoch -= 1
         if num_epoch > 0:
             item_embeddings = model.get_embeddings(item_ids)
-            print(len(item_embeddings))
             tree = TreeLearning(item_embeddings, item_ids)
             _ = tree.clustering_binary_tree()
     dtest = Dataset(data_test, 100)
